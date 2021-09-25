@@ -4,6 +4,7 @@ const TimeTableController = require('../controller/timeTable.controller');
 
 module.exports = function (){
     router.get('/', TimeTableController.getAllTimeTable);
+    router.post('/getAllTimeTableByFromTo', TimeTableController.getAllTimeTableByFromTo);
     router.post('/create', TimeTableController.createTimeTable);
     router.post('/update', TimeTableController.updateTimeTable);
     router.post('/delete',TimeTableController.deleteTimeTable);

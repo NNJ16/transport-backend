@@ -91,6 +91,46 @@ const getAllTimeTable = async (req, res) => {
         });
 }
 
+
+//get All TimeTable By From And To
+const getAllTimeTableByFromTo = async (req, res) => {
+    console.log('Start')
+    console.log(req.body.from)
+    await TimeTable.aggregate([
+        {
+            "$lookup": {
+                "from": "routes",
+                "localField": "routeId",
+                "foreignField": "_id",
+                "as": "routeId"
+            }
+        },
+        {
+            "$lookup": {
+                "from": "buses",
+                "localField": "busId",
+                "foreignField": "_id",
+                "as": "busId"
+            }
+        },
+        {
+            "$match": {
+                "routeId.from": req.body.from,
+                "routeId.to": req.body.to,
+            }
+        }
+    ])
+        .then((data) => {
+            console.log(data);
+            res.status(200).send(data);
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(500).send(error);
+        });
+}
+
+
 //delete TimeTable
 const deleteTimeTable = async (req, res) => {
     if (req.body.id) {
@@ -105,6 +145,7 @@ const deleteTimeTable = async (req, res) => {
 module.exports = {
     createTimeTable,
     updateTimeTable,
+    getAllTimeTableByFromTo,
     deleteTimeTable,
     getAllTimeTable
 }
