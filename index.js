@@ -2,8 +2,7 @@ const express = require("express");
 const cors = require('cors');
 const bodyParser = require("body-parser");
 const connectDB = require("./src/config/database");
-const PassengerAPI = require("./src/api/passengers.api");
-const EmployeeAPI = require("./src/api/employee.api");
+const UserAPI = require("./src/api/user.api");
 const RouteAPI = require("./src/api/route.api");
 const BusAPI = require("./src/api/bus.api");
 const TimeTableAPI = require("./src/api/timeTable.api");
@@ -21,8 +20,7 @@ app.get("/", (req, res) => {
     res.send("Hello Node!");
 });
 
-app.use("/passenger", PassengerAPI());
-app.use("/employee", EmployeeAPI());
+app.use("/user", UserAPI());
 app.use("/route", RouteAPI());
 app.use("/bus", BusAPI());
 app.use("/timeTable", TimeTableAPI());

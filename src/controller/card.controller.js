@@ -1,4 +1,5 @@
 const Card = require("../model/card.model");
+const User = require("../model/user.model");
 
 //Register a Card | guest
 const createCard = async (req, res) => {
@@ -8,16 +9,28 @@ const createCard = async (req, res) => {
                 console.log(err);
             } else {
                 if (!result) {
-                            const card = new Card(req.body);
-                            await card.save()
-                                .then(data => {
-                                    console.log(data);
-                                    res.status(200).send(data);
-                                })
-                                .catch(err => {
-                                    console.log(err);
-                                    res.send(err);
-                                });
+                    await User.findOne({ _id: req.body.userId }, async (err, newResult) => {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            if (newResult) {
+                                        const card = new Card(req.body);
+                                        await card.save()
+                                            .then(data => {
+                                                console.log(data);
+                                                res.status(200).send(data);
+                                            })
+                                            .catch(err => {
+                                                console.log(err);
+                                                res.send(err);
+                                            });
+                                    
+                            } else {
+                                console.log("User Not Exist");
+                                res.send({ message: "User Not Exist" });
+                            }
+                        }
+                    });
                         
                 } else {
                     console.log("Card Already Exist");
@@ -67,7 +80,7 @@ function updateDetails(id, req, callback) {
 
 //get All Card
 const getAllCard = async (req, res) => {
-    await Card.find()
+    await Card.find().populate('userId')
         .then((data) => {
             console.log(data);
             res.status(200).send(data);
