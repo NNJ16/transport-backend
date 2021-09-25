@@ -91,6 +91,19 @@ const getAllCard = async (req, res) => {
         });
 }
 
+//get All Card By User Id
+const getAllCardByUserId = async (req, res) => {
+    await Card.find({ userId: req.body.userId }).populate('userId')
+        .then((data) => {
+            console.log(data);
+            res.status(200).send(data);
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(500).send(error);
+        });
+}
+
 //delete Card
 const deleteCard = async (req, res) => {
     if (req.body.id) {
@@ -105,6 +118,7 @@ const deleteCard = async (req, res) => {
 module.exports = {
     createCard,
     updateCard,
+    getAllCardByUserId,
     deleteCard,
     getAllCard
 }
